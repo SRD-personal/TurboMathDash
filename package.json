@@ -1,0 +1,31 @@
+{
+  "name": "turbo-math-dash",
+  "version": "0.1.0",
+  "description": "3D Math Runner Game for Kids (Kindergarten to Grade 4)",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "android": "npm run build && npx cap sync android && npx cap open android"
+  },
+  "keywords": [
+    "game",
+    "education",
+    "math",
+    "3d",
+    "android",
+    "kids"
+  ],
+  "author": "TurboMathDash Team",
+  "license": "MIT",
+  "dependencies": {
+    "three": "^0.159.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@capacitor/core": "^5.5.1",
+    "@capacitor/cli": "^5.5.1",
+    "@capacitor/android": "^5.5.1"
+  }
+}

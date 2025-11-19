@@ -1,0 +1,16 @@
+{
+  "appId": "com.turbomath.dash",
+  "appName": "Turbo Math Dash",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "buildOptions": {
+      "keystorePath": "",
+      "keystorePassword": "",
+      "keystoreAlias": "",
+      "keystoreAliasPassword": ""
+    }
+  }
+}

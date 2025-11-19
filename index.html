@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#87CEEB">
+    <title>🌟 Turbo Math Dash</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', cursive, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(180deg, #87CEEB 0%, #E0BBE4 100%);
+            touch-action: none;
+        }
+
+        #game-canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            touch-action: none;
+        }
+
+        /* HUD Overlay */
+        #hud {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .hud-top {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .hud-hearts {
+            display: flex;
+            gap: 5px;
+        }
+
+        .hud-score {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Math Question Bubble */
+        #math-question {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            border: 5px solid #FFD700;
+            border-radius: 25px;
+            padding: 30px 50px;
+            font-size: 48px;
+            font-weight: bold;
+            color: #2F4F4F;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        /* Answer Lanes Overlay */
+        #answer-lanes {
+            position: absolute;
+            bottom: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            gap: 20px;
+        }
+
+        .answer-lane {
+            background: rgba(255, 255, 255, 0.9);
+            border: 4px solid #32CD32;
+            border-radius: 15px;
+            padding: 20px 30px;
+            font-size: 36px;
+            font-weight: bold;
+            color: #2F4F4F;
+            min-width: 80px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Feedback Messages */
+        #feedback {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 64px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            display: none;
+            animation: fadeInOut 1.5s ease;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            30% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            70% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        }
+
+        .correct { color: #32CD32; }
+        .wrong { color: #FF6347; }
+
+        /* Start Screen */
+        #start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #87CEEB 0%, #E0BBE4 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            pointer-events: auto;
+        }
+
+        #start-screen h1 {
+            font-size: 48px;
+            color: white;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            animation: titleBounce 2s infinite;
+        }
+
+        @keyframes titleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        #start-button {
+            background: linear-gradient(135deg, #32CD32, #228B22);
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            padding: 20px 60px;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            cursor: pointer;
+            animation: pulse 1.5s infinite;
+            pointer-events: auto;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        #start-button:active {
+            transform: scale(0.95);
+        }
+
+        .character-info {
+            margin-top: 30px;
+            font-size: 24px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Pause Button */
+        #pause-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 3px solid #2F4F4F;
+            border-radius: 10px;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            pointer-events: auto;
+            z-index: 150;
+            display: none;
+        }
+
+        /* Loading */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Game Canvas -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- HUD Overlay -->
+    <div id="hud">
+        <div class="hud-top">
+            <div class="hud-hearts">
+                <span>❤️</span>
+                <span>❤️</span>
+                <span>❤️</span>
+            </div>
+            <div class="hud-score">
+                <span>💰 <span id="coins">0</span></span>
+                <span>⭐ <span id="stars">0</span></span>
+                <span>📏 <span id="distance">0</span>m</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Math Question Bubble -->
+    <div id="math-question"></div>
+
+    <!-- Answer Lanes -->
+    <div id="answer-lanes"></div>
+
+    <!-- Feedback -->
+    <div id="feedback"></div>
+
+    <!-- Pause Button -->
+    <button id="pause-btn">⏸</button>
+
+    <!-- Start Screen -->
+    <div id="start-screen">
+        <h1>🌟 TURBO MATH DASH 🌟</h1>
+        <div class="character-info">
+            <div style="font-size: 64px; margin-bottom: 10px;">🦕</div>
+            <div>Dash the Dino</div>
+            <div style="font-size: 18px; margin-top: 10px;">"Let's DASH!"</div>
+        </div>
+        <button id="start-button">🚀 START RUN!</button>
+        <div style="margin-top: 30px; font-size: 18px; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+            Swipe ← → to move | Swipe ↑ to jump
+        </div>
+    </div>
+
+    <!-- Game Script -->
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

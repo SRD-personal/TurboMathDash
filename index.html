@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#87CEEB">
+    <meta name="theme-color" content="#1a1a2e">
     <title>🌟 Turbo Math Dash</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,10 +14,19 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        :root {
+            --primary: #4ECDC4;
+            --secondary: #FF6B6B;
+            --accent: #FFE66D;
+            --success: #95E1D3;
+            --bg-dark: #1a1a2e;
+            --bg-light: #16213e;
+        }
+
         body {
-            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', cursive, sans-serif;
+            font-family: 'Poppins', sans-serif;
             overflow: hidden;
-            background: linear-gradient(180deg, #87CEEB 0%, #E0BBE4 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             touch-action: none;
         }
 
@@ -40,92 +50,155 @@
         .hud-top {
             display: flex;
             justify-content: space-between;
-            padding: 15px;
+            padding: 12px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 100%);
+        }
+
+        .hud-stat {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 8px 16px;
             color: white;
+            font-weight: 700;
+            font-size: 18px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            font-size: 20px;
-            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 2px solid rgba(255,255,255,0.3);
         }
 
         .hud-hearts {
             display: flex;
-            gap: 5px;
+            gap: 4px;
+            background: rgba(255,107,107,0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 8px 12px;
+            border: 2px solid rgba(255,255,255,0.3);
         }
 
-        .hud-score {
-            display: flex;
-            gap: 15px;
+        .heart {
+            font-size: 24px;
+            animation: heartbeat 1.5s infinite;
         }
 
-        /* Math Question Bubble */
-        #math-question {
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+        }
+
+        /* Math Question - Enhanced */
+        #math-question-container {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.95);
-            border: 5px solid #FFD700;
-            border-radius: 25px;
-            padding: 30px 50px;
-            font-size: 48px;
-            font-weight: bold;
-            color: #2F4F4F;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             display: none;
-            animation: bounce 0.5s ease;
+            z-index: 150;
+            animation: slideIn 0.5s ease;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.1); }
+        @keyframes slideIn {
+            from { transform: translate(-50%, -100%); opacity: 0; }
+            to { transform: translate(-50%, -50%); opacity: 1; }
         }
 
-        /* Answer Lanes Overlay */
+        #math-question {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 6px solid var(--accent);
+            border-radius: 30px;
+            padding: 40px 60px;
+            font-size: 56px;
+            font-weight: 900;
+            color: white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            text-align: center;
+            font-family: 'Fredoka One', cursive;
+            position: relative;
+        }
+
+        #question-timer {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: var(--secondary);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 900;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: timerPulse 1s infinite;
+        }
+
+        @keyframes timerPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        #question-hint {
+            font-size: 18px;
+            color: var(--accent);
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        /* Answer Lanes - Enhanced */
         #answer-lanes {
             position: absolute;
-            bottom: 40%;
+            bottom: 30%;
             left: 50%;
             transform: translateX(-50%);
             display: none;
-            gap: 20px;
+            gap: 25px;
         }
 
         .answer-lane {
-            background: rgba(255, 255, 255, 0.9);
-            border: 4px solid #32CD32;
-            border-radius: 15px;
-            padding: 20px 30px;
-            font-size: 36px;
-            font-weight: bold;
-            color: #2F4F4F;
-            min-width: 80px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+            border: 5px solid var(--primary);
+            border-radius: 25px;
+            padding: 25px 35px;
+            font-size: 48px;
+            font-weight: 900;
+            color: #333;
+            min-width: 100px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            font-family: 'Fredoka One', cursive;
         }
 
         /* Feedback Messages */
         #feedback {
             position: absolute;
-            top: 35%;
+            top: 30%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 64px;
-            font-weight: bold;
+            font-size: 72px;
+            font-weight: 900;
             color: white;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.5);
             display: none;
-            animation: fadeInOut 1.5s ease;
+            animation: feedbackPop 2s ease;
+            font-family: 'Fredoka One', cursive;
+            z-index: 200;
         }
 
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-            30% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
-            70% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+        @keyframes feedbackPop {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+            15% { opacity: 1; transform: translate(-50%, -50%) scale(1.3); }
+            75% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
             100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
         }
 
-        .correct { color: #32CD32; }
-        .wrong { color: #FF6347; }
+        .correct { color: var(--success); text-shadow: 0 0 20px var(--success); }
+        .wrong { color: var(--secondary); text-shadow: 0 0 20px var(--secondary); }
 
         /* Start Screen */
         #start-screen {
@@ -134,7 +207,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, #87CEEB 0%, #E0BBE4 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -143,75 +216,191 @@
             pointer-events: auto;
         }
 
-        #start-screen h1 {
-            font-size: 48px;
+        .game-title {
+            font-size: 56px;
             color: white;
-            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
-            margin-bottom: 20px;
-            animation: titleBounce 2s infinite;
+            text-shadow: 5px 5px 10px rgba(0,0,0,0.4);
+            margin-bottom: 30px;
+            animation: titleFloat 3s infinite;
+            font-family: 'Fredoka One', cursive;
+            text-align: center;
+            padding: 0 20px;
         }
 
-        @keyframes titleBounce {
+        @keyframes titleFloat {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-15px); }
         }
 
-        #start-button {
-            background: linear-gradient(135deg, #32CD32, #228B22);
+        .character-preview {
+            margin: 20px 0;
+            animation: characterBounce 2s infinite;
+        }
+
+        @keyframes characterBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .character-preview-emoji {
+            font-size: 120px;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+        }
+
+        .game-button {
+            background: linear-gradient(135deg, var(--primary), var(--success));
             color: white;
-            font-size: 32px;
-            font-weight: bold;
+            font-size: 28px;
+            font-weight: 900;
             padding: 20px 60px;
             border: none;
             border-radius: 50px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             cursor: pointer;
-            animation: pulse 1.5s infinite;
+            animation: buttonPulse 2s infinite;
             pointer-events: auto;
+            font-family: 'Fredoka One', cursive;
+            text-transform: uppercase;
+            border: 4px solid white;
+            margin: 10px;
         }
 
-        @keyframes pulse {
+        @keyframes buttonPulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
 
-        #start-button:active {
+        .game-button:active {
             transform: scale(0.95);
         }
 
-        .character-info {
-            margin-top: 30px;
-            font-size: 24px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        .settings-button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
 
-        /* Pause Button */
-        #pause-btn {
+        /* Settings Screen */
+        #settings-screen {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255, 255, 255, 0.8);
-            border: 3px solid #2F4F4F;
-            border-radius: 10px;
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
-            cursor: pointer;
-            pointer-events: auto;
-            z-index: 150;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 30px 20px;
+            z-index: 250;
+            pointer-events: auto;
+            overflow-y: auto;
         }
 
-        /* Loading */
-        .loading {
+        .settings-title {
+            font-size: 42px;
+            color: white;
+            font-family: 'Fredoka One', cursive;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+
+        .settings-group {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 90%;
+            max-width: 500px;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .settings-label {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .settings-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .option-btn {
+            background: rgba(255,255,255,0.3);
+            color: white;
+            border: 3px solid transparent;
+            padding: 12px 24px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .option-btn.selected {
+            background: var(--primary);
+            border-color: white;
+            transform: scale(1.1);
+        }
+
+        .option-btn:active {
+            transform: scale(0.95);
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+            margin-top: 20px;
+        }
+
+        /* Speed Indicator */
+        #speed-indicator {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 24px;
+            top: 80px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 10px 15px;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            display: none;
+            pointer-events: none;
+        }
+
+        .controls-info {
+            margin-top: 30px;
+            font-size: 18px;
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-align: center;
+            padding: 0 20px;
+            font-weight: 600;
+        }
+
+        /* Progress Bar for Question */
+        #question-progress {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        #question-progress-bar {
+            height: 100%;
+            background: var(--accent);
+            width: 100%;
+            transition: width 0.1s linear;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -222,21 +411,34 @@
     <!-- HUD Overlay -->
     <div id="hud">
         <div class="hud-top">
-            <div class="hud-hearts">
-                <span>❤️</span>
-                <span>❤️</span>
-                <span>❤️</span>
+            <div class="hud-hearts" id="hearts-container">
+                <span class="heart">❤️</span>
+                <span class="heart">❤️</span>
+                <span class="heart">❤️</span>
             </div>
-            <div class="hud-score">
-                <span>💰 <span id="coins">0</span></span>
-                <span>⭐ <span id="stars">0</span></span>
-                <span>📏 <span id="distance">0</span>m</span>
+            <div style="display: flex; gap: 10px;">
+                <div class="hud-stat">💰 <span id="coins">0</span></div>
+                <div class="hud-stat">⭐ <span id="stars">0</span></div>
             </div>
         </div>
     </div>
 
-    <!-- Math Question Bubble -->
-    <div id="math-question"></div>
+    <!-- Speed Indicator -->
+    <div id="speed-indicator">
+        Speed: <span id="current-speed">Normal</span>
+    </div>
+
+    <!-- Math Question Container -->
+    <div id="math-question-container">
+        <div id="math-question">
+            <div id="question-timer">20</div>
+            <div id="question-text"></div>
+            <div id="question-hint">Choose the correct lane!</div>
+            <div id="question-progress">
+                <div id="question-progress-bar"></div>
+            </div>
+        </div>
+    </div>
 
     <!-- Answer Lanes -->
     <div id="answer-lanes"></div>
@@ -244,21 +446,72 @@
     <!-- Feedback -->
     <div id="feedback"></div>
 
-    <!-- Pause Button -->
-    <button id="pause-btn">⏸</button>
-
     <!-- Start Screen -->
     <div id="start-screen">
-        <h1>🌟 TURBO MATH DASH 🌟</h1>
-        <div class="character-info">
-            <div style="font-size: 64px; margin-bottom: 10px;">🦕</div>
-            <div>Dash the Dino</div>
-            <div style="font-size: 18px; margin-top: 10px;">"Let's DASH!"</div>
+        <h1 class="game-title">🌟 TURBO MATH DASH 🌟</h1>
+        <div class="character-preview">
+            <div class="character-preview-emoji">🦕</div>
+            <div style="text-align: center; color: white; font-size: 24px; font-weight: 700; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                Dash the Dino
+            </div>
+            <div style="text-align: center; color: var(--accent); font-size: 18px; margin-top: 5px; font-weight: 600;">
+                "Let's DASH!"
+            </div>
         </div>
-        <button id="start-button">🚀 START RUN!</button>
-        <div style="margin-top: 30px; font-size: 18px; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
-            Swipe ← → to move | Swipe ↑ to jump
+        <button class="game-button" id="start-button">🚀 START RUN!</button>
+        <button class="game-button settings-button" id="open-settings">⚙️ SETTINGS</button>
+        <div class="controls-info">
+            Swipe ← → to move lanes<br>
+            Swipe ↑ or Tap to jump<br>
+            Answer math questions to score!
         </div>
+    </div>
+
+    <!-- Settings Screen -->
+    <div id="settings-screen">
+        <h2 class="settings-title">⚙️ SETTINGS</h2>
+
+        <div class="settings-group">
+            <div class="settings-label">Grade Level</div>
+            <div class="settings-options">
+                <button class="option-btn" data-setting="grade" data-value="K">K</button>
+                <button class="option-btn selected" data-setting="grade" data-value="1">1</button>
+                <button class="option-btn" data-setting="grade" data-value="2">2</button>
+                <button class="option-btn" data-setting="grade" data-value="3">3</button>
+                <button class="option-btn" data-setting="grade" data-value="4">4</button>
+            </div>
+        </div>
+
+        <div class="settings-group">
+            <div class="settings-label">Difficulty</div>
+            <div class="settings-options">
+                <button class="option-btn selected" data-setting="difficulty" data-value="easy">😊 Easy</button>
+                <button class="option-btn" data-setting="difficulty" data-value="medium">😎 Medium</button>
+                <button class="option-btn" data-setting="difficulty" data-value="hard">🔥 Hard</button>
+            </div>
+        </div>
+
+        <div class="settings-group">
+            <div class="settings-label">Game Speed</div>
+            <div class="settings-options">
+                <button class="option-btn" data-setting="speed" data-value="slow">🐢 Slow</button>
+                <button class="option-btn selected" data-setting="speed" data-value="normal">🏃 Normal</button>
+                <button class="option-btn" data-setting="speed" data-value="fast">🚀 Fast</button>
+                <button class="option-btn" data-setting="speed" data-value="turbo">⚡ Turbo</button>
+            </div>
+        </div>
+
+        <div class="settings-group">
+            <div class="settings-label">Question Time</div>
+            <div class="settings-options">
+                <button class="option-btn" data-setting="questionTime" data-value="15">15s</button>
+                <button class="option-btn selected" data-setting="questionTime" data-value="20">20s</button>
+                <button class="option-btn" data-setting="questionTime" data-value="30">30s</button>
+                <button class="option-btn" data-setting="questionTime" data-value="60">60s</button>
+            </div>
+        </div>
+
+        <button class="game-button back-button" id="close-settings">← BACK</button>
     </div>
 
     <!-- Game Script -->
